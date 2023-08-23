@@ -9,11 +9,18 @@ import numpy as np
 import os
 import pickle
 from torch.utils.data import Dataset
+from data.mesh_and_cut import *
 
-mesh_resolution = 5
-cut_type = 'ninja'
+
 num_samples = 1024  # 替换为您希望的采样点数 cut1 - 0.05:510, 0.01:2425; cut2 - 0.05:(1024) 0.01:3052; dome - 0.05:86, 0.01:384; ninja - 0.05:146, 0.01:611
+def validate_mesh_resolution():
+    print('mesh_resolution in DataLoad_utils:' + str(mesh_resolution))
+
+def validate_cut_type():
+    print('cut_type in DataLoad_utils:' + str(cut_type))
 train_dict,val_dict,test_dict=vtp_to_point_cloud(mesh_resolution=mesh_resolution,cut_type=cut_type,num_samples=num_samples)
+
+
 
 train_length = len(train_dict)
 # print(train_length)

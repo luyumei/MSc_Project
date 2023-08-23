@@ -4,12 +4,12 @@ import torch
 from construct_PC_model import optimizer
 import numpy as np
 from tqdm import tqdm
-batch_size=10
-num_workers=0
-train_dataset,val_dataset,test_dataset=generate_dataset()
-train_DataLoader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-val_DataLoader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
-test_DataLoader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+# batch_size=10
+# num_workers=0
+# train_dataset,val_dataset,test_dataset=generate_dataset()
+# train_DataLoader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+# val_DataLoader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+# test_DataLoader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
 # for point, label in test_DataLoader:
 #     print(point.shape)
@@ -39,8 +39,6 @@ def judging_computation_device():
 device=judging_computation_device()
 
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.5)
-best_instance_acc = 0.0
-best_class_acc = 0.0
 
 def random_point_dropout(batch_pc, max_dropout_ratio=0.875):
     ''' batch_pc: BxNx3 '''

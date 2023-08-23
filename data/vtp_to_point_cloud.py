@@ -30,9 +30,11 @@ def vtp_to_point_cloud(mesh_resolution:int,cut_type:str,num_samples:int):
     train_ids_and_status = csv_dataset_to_dict(dataset_path='./data/processed_data/aneurisk_and_aneurist.csv')
     val_ids_and_status = csv_dataset_to_dict(dataset_path='./data/processed_data/hug2016.csv')
     test_ids_and_status = csv_dataset_to_dict(dataset_path='./data/processed_data/hug2016snf.csv')
-
+    print('mesh_resolution in vtp_to_point_cloud:' + str(mesh_resolution))
+    print('cut_type vtp_to_point_cloud:' + str(cut_type))
     # mesh_resolution=1
     # cut_type='ninja'
+
     vtp_dir=f"./data/original_data/remeshed/area-00{mesh_resolution}/{cut_type}/"
     if cut_type == 'cut2':
         train_ids_and_status, val_ids_and_status, test_ids_and_status=special_spilt_dict_for_cut2(vtp_dir=vtp_dir,train_ids_and_status=train_ids_and_status,val_ids_and_status=val_ids_and_status,test_ids_and_status=test_ids_and_status)
@@ -49,33 +51,33 @@ def vtp_to_point_cloud(mesh_resolution:int,cut_type:str,num_samples:int):
     if not os.path.exists(csvs_directory):
         os.makedirs(csvs_directory)
 
-    # point_count_lst=[]
-    # count=0
-    for this_path in all_vtp_files_paths:
-        # count+=1
-        polydata = read_vtp_file(file_path=this_path)
-        points = polydata.GetPoints()
-        num_points = points.GetNumberOfPoints()
-        if num_points < num_samples : continue
-        # 进行均匀随机采样
-        # sampled_polydata, _ = randomly_sample_points(num_points=num_points, num_samples=num_samples, point_count_lst=point_count_lst)
-        # 这部分数据集各有多少个点
-        # point_count_lst.sort()
-        # 转换为NumPy数组
-        numpy_array = polydata_to_numpy(polydata=polydata)
+        # point_count_lst=[]
+        # count=0
+        for this_path in all_vtp_files_paths:
+            # count+=1
+            polydata = read_vtp_file(file_path=this_path)
+            points = polydata.GetPoints()
+            num_points = points.GetNumberOfPoints()
+            if num_points < num_samples : continue
+            # 进行均匀随机采样
+            # sampled_polydata, _ = randomly_sample_points(num_points=num_points, num_samples=num_samples, point_count_lst=point_count_lst)
+            # 这部分数据集各有多少个点
+            # point_count_lst.sort()
+            # 转换为NumPy数组
+            numpy_array = polydata_to_numpy(polydata=polydata)
 
-        # if 1==count: break
-        # CSV文件名们
-        csv_file_name = os.path.basename(this_path).replace(".vtp", ".csv")#提取原路径中的文件名
-        # CSV储存路径
-        output_path = os.path.join(csvs_directory, csv_file_name)
-        np.savetxt(output_path, numpy_array, delimiter=",", fmt='%.6f')
+            # if 1==count: break
+            # CSV文件名们
+            csv_file_name = os.path.basename(this_path).replace(".vtp", ".csv")#提取原路径中的文件名
+            # CSV储存路径
+            output_path = os.path.join(csvs_directory, csv_file_name)
+            np.savetxt(output_path, numpy_array, delimiter=",", fmt='%.6f')
 
-    print(numpy_array)
-    print(numpy_array.shape)
-    # visualise_point_cloud(numpy_array)
-    # print(point_count_lst)
-    # print(len(point_count_lst))
+        print(numpy_array)
+        print(numpy_array.shape)
+        # visualise_point_cloud(numpy_array)
+        # print(point_count_lst)
+        # print(len(point_count_lst))
 
     matching_files = []
     for filename in os.listdir(csvs_directory):
